@@ -55,3 +55,108 @@ sequenceDiagram
             MonitorThread->>Console: Log ALERT message
         end
     end
+
+
+API Endpoints
+Register Monitor
+
+POST /monitors
+
+Request:
+
+{
+  "id": "device-123",
+  "timeout": 60
+}
+
+Response:
+
+{
+  "message": "Monitor device-123 registered",
+  "data": {
+    "timeout": 60,
+    "last_ping": 1710000000,
+    "status": "active"
+  }
+}
+Get All Monitors
+
+GET /monitors
+
+Response:
+
+{
+  "device-123": {
+    "timeout": 60,
+    "last_ping": 1710000000,
+    "status": "active"
+  }
+}
+Heartbeat
+
+POST /monitors/{device_id}/heartbeat
+
+Response:
+
+{
+  "message": "Heartbeat received from device-123",
+  "data": {
+    "timeout": 60,
+    "last_ping": 1710000000,
+    "status": "active"
+  }
+}
+Alert System
+
+When a device fails to send a heartbeat within its timeout period, the system triggers an alert:
+
+{
+  "ALERT": "Device device-123 is down!",
+  "time": 1710000000
+}
+
+This is printed in the console to simulate real-world alerting.
+
+How It Works
+Device registers with ID and timeout
+Server stores device state in memory
+Device sends periodic heartbeat requests
+Background thread continuously checks timestamps
+If timeout is exceeded, device is marked as down
+Alert is triggered in console
+Setup Instructions
+
+Install dependencies:
+
+pip install flask
+
+Run the application:
+
+python app.py
+Project Structure
+pulse-check-api/
+├── app.py
+├── README.md
+└── .gitignore
+Developer Improvement
+Input Validation Feature
+
+Added validation to ensure:
+
+Required fields exist (id, timeout)
+Invalid requests are rejected safely
+Why this matters
+
+This prevents:
+
+System crashes from bad input
+Inconsistent data states
+Unsafe API usage
+
+It improves reliability and production readiness.
+
+Technologies Used
+Python
+Flask
+Threading
+Time module
