@@ -58,29 +58,3 @@ sequenceDiagram
 
 
 
-## API Endpoints
-
----
-
-### Register Monitor
-
-**POST /monitors**
-
-Request:
-
-```json id="r1"
-{
-  "id": "device-123",
-  "timeout": 60
-}
-
-Response:
-
-{
-  "message": "Monitor device-123 registered",
-  "data": {
-    "timeout": 60,
-    "last_ping": 1710000000,
-    "status": "active"
-  }
-}
